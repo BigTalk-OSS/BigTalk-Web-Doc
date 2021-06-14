@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: web3js/ContractInterface.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: web3js/ContractInterface.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import {UPDATE_STATUS_EVENT_TAG, UPDATE_POST_ID_FETCH_TAG, UPDATE_STATUS_POST_LOAD_TAG} from "../utils/EventTags";
+import Web3 from "web3";
+import {CONTRACT_ABI, CONTRACT_ADDRESS} from "../contract/ContractMetadata";
+import {Post} from "../models/Post";
+import {ShowNotification} from "../utils/ShowNotification";
+import AlertNotification from "../artifacts/AlertNotification";
+
+/**
+ * This function loads the web3 provider, asks for connection, connects to the contract and prepares everything before loading the web-app
+ * @returns {Promise&lt;string>}
+ * @async
+ * @method
+ * @example
+ * loadWeb3().then((r)=>{
+ *     console.log(r)
+ * }).catch((e)=>{
+ *     console.log(e)
+ * })
+ *
+ * @see loadReadOnlyMode
+ */
+export async function LoadWeb3() {
+    if (window.ethereum) {
+        window.dispatchEvent(new CustomEvent(UPDATE_STATUS_EVENT_TAG, {detail: "Waiting for approval"}))
+        window.web3 = new Web3(window.ethereum);
+        try{
+            await window.ethereum.enable();
+            window.dispatchEvent(new CustomEvent(UPDATE_STATUS_EVENT_TAG, {detail: "Loading contract"}))
+            window.contract = await loadContract();
+            console.log("Contract loaded!");
+            console.log(window.contract);
+            window.dispatchEvent(new CustomEvent(UPDATE_STATUS_EVENT_TAG, {detail: "Welcome"}))
+            return Promise.resolve("Done");
+        }catch(e){
+            console.log(e);
+            window.dispatchEvent(new CustomEvent(UPDATE_STATUS_EVENT_TAG, {detail: "Permission Denied"}))
+            await loadReadOnlyMode()
+        }
+    }
+    else if(window.web3){
+        window.web3 = new Web3(window.web3.currentProvider);
+        window.dispatchEvent(new CustomEvent(UPDATE_STATUS_EVENT_TAG, {detail: "Loading contract"}))
+        window.contract = await loadContract();
+        console.log("Contract loaded!");
+        console.log(window.contract);
+        window.dispatchEvent(new CustomEvent(UPDATE_STATUS_EVENT_TAG, {detail: "Welcome"}))
+        return Promise.resolve("Done");
+    }
+    else{
+        await loadReadOnlyMode();
+        return Promise.resolve("Done");
+    }
+}
+
+/**
+ * This function loads the web-app in read-only mode when the web3 provider is missing from the browser.
+ * @returns {Promise&lt;string>}
+ * @async
+ * @example
+ * await loadReadOnlyMode();
+ */
+async function loadReadOnlyMode(){
+    window.dispatchEvent(new CustomEvent(UPDATE_STATUS_EVENT_TAG, {detail: "Connecting to node"}));
+    window.web3 = await new Web3(new Web3.providers.HttpProvider("https://data-seed-prebsc-2-s1.binance.org:8545/"));
+    window.dispatchEvent(new CustomEvent(UPDATE_STATUS_EVENT_TAG, {detail: "Loading contract"}));
+    window.contract = await loadContract();
+    window.dispatchEvent(new CustomEvent(UPDATE_STATUS_EVENT_TAG, {detail: "Welcome"}));
+    ShowNotification(&lt;AlertNotification theme={"warning"} message={"Launching in read-only mode"}/>);
+    console.log("We can't detect Metamask or any wallet provider in this browser! Launching in Read-only mode!");
+    await alert("We can't detect Metamask or any wallet provider on this browser. Without that you will only be able to read articles but can not comment or add new posts.");
+    return Promise.resolve("Done");
+}
+
+/**
+ * This function returns the contract after loading it
+ * @async
+ * @returns {Promise&lt;*>}
+ *
+ * @example
+ * window.contract = await loadContract();
+ */
+async function loadContract(){
+    return await new window.web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS);
+}
+
+/**
+ * This function loads post data from the contract to the global variables.
+ * @async
+ * @param {number} limit - The number of posts you want to load. 0 or &lt;0 will fetch all the posts.
+ * @returns {Promise&lt;string>}
+ *
+ * @example
+ * let list = loadPosts(5)
+ * //returns top 5 latest posts
+ *
+ * let list2 = loadPosts()
+ * //returns all the posts
+ *
+ * let list3 = loadPosts(-1)
+ * //returns all the posts
+ *
+ * @see Post
+ */
+export async function loadPosts(limit=-1) {
+    window.dispatchEvent(new CustomEvent(UPDATE_STATUS_POST_LOAD_TAG, {detail: "Loading index"}))
+    window.postBankIndex = await window.contract.methods.getPostBankIndex().call();
+    window.dispatchEvent(new CustomEvent(UPDATE_STATUS_POST_LOAD_TAG, {detail: "Loading posts"}))
+    window.postBank = [];
+
+    if(limit&lt;0) limit = window.postBankIndex.length
+
+    for(let id of window.postBankIndex.slice(window.postBankIndex.length - limit, window.postBankIndex.length)){
+        window.dispatchEvent(new CustomEvent(UPDATE_POST_ID_FETCH_TAG, {detail: id}))
+
+        let rawData = await window.contract.methods.getPost(id).call();
+        let post = new Post({id: id,
+            title: rawData.heading,
+            body: rawData.body,
+            location: rawData.location,
+            timestamp: rawData.timestamp,
+            author: rawData.author})
+
+        window.postBank.push(post);
+    }
+
+    console.log(window.postBankIndex);
+    console.log(window.postBank);
+
+    window.dispatchEvent(new CustomEvent(UPDATE_STATUS_EVENT_TAG, {detail: "Done"}))
+    return Promise.resolve("Done");
+}
+
+/**
+ * This function loads post data from the contract and passes it from the promise
+ * @async
+ * @param {number} limit - The number of posts you want to load. 0 or &lt;0 will fetch all the posts.
+ * @returns {Promise&lt;string>}
+ *
+ * @example
+ * getPosts(5).then({list}=>{
+ *     console.log(e);
+ * })
+ * //returns top 5 latest posts
+ *
+ * getPosts().then({list}=>{
+ *     console.log(e);
+ * })
+ * //returns all the posts
+ *
+ * getPosts(-1).then({list}=>{
+ *     console.log(e);
+ * })
+ * //returns all the posts
+ * @returns {Promise&lt;Post[]>}
+ *
+ * @see Post
+ */
+export async function getPosts(limit=-1) {
+    window.dispatchEvent(new CustomEvent(UPDATE_STATUS_POST_LOAD_TAG, {detail: "Loading index"}))
+    let postBankIndex = await window.contract.methods.getPostBankIndex().call();
+    window.dispatchEvent(new CustomEvent(UPDATE_STATUS_POST_LOAD_TAG, {detail: "Loading posts"}))
+    let postBank = [];
+
+    if(limit&lt;0) limit = postBankIndex.length
+
+    for(let id of postBankIndex.slice(postBankIndex.length - limit, postBankIndex.length)){
+        window.dispatchEvent(new CustomEvent(UPDATE_POST_ID_FETCH_TAG, {detail: id}))
+
+        let rawData = await window.contract.methods.getPost(id).call();
+        let post = new Post({id:id,
+            title: rawData.heading,
+            body: rawData.body,
+            location: rawData.location,
+            timestamp: rawData.timestamp,
+            author: rawData.author})
+
+        postBank.push(post);
+    }
+
+    console.log(window.postBankIndex);
+    console.log(window.postBank);
+
+    window.dispatchEvent(new CustomEvent(UPDATE_STATUS_EVENT_TAG, {detail: "Done"}))
+    return Promise.resolve(postBank);
+}
+
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AlertNotification.html">AlertNotification</a></li></ul><h3>Classes</h3><ul><li><a href="GlobalEventListener.html">GlobalEventListener</a></li><li><a href="MainScreen.html">MainScreen</a></li><li><a href="module-AlertNotification.html">AlertNotification</a></li><li><a href="Post.html">Post</a></li><li><a href="PostCard.html">PostCard</a></li><li><a href="PostLoadingScreen.html">PostLoadingScreen</a></li><li><a href="SplashScreen.html">SplashScreen</a></li><li><a href="TimeLine.html">TimeLine</a></li><li><a href="TitleBar.html">TitleBar</a></li></ul><h3>Global</h3><ul><li><a href="global.html#CONTRACT_ABI">CONTRACT_ABI</a></li><li><a href="global.html#CONTRACT_ADDRESS">CONTRACT_ADDRESS</a></li><li><a href="global.html#createPostTimeLineInterface">createPostTimeLineInterface</a></li><li><a href="global.html#delay">delay</a></li><li><a href="global.html#getLastIntentData">getLastIntentData</a></li><li><a href="global.html#getPosts">getPosts</a></li><li><a href="global.html#getPostsFromBlockChain">getPostsFromBlockChain</a></li><li><a href="global.html#Intent">Intent</a></li><li><a href="global.html#loadContract">loadContract</a></li><li><a href="global.html#loadPosts">loadPosts</a></li><li><a href="global.html#loadReadOnlyMode">loadReadOnlyMode</a></li><li><a href="global.html#LoadWeb3">LoadWeb3</a></li><li><a href="global.html#MAIN_CONTEXT_ID">MAIN_CONTEXT_ID</a></li><li><a href="global.html#ShowNotification">ShowNotification</a></li><li><a href="global.html#sortByNewTimeStampFirst">sortByNewTimeStampFirst</a></li><li><a href="global.html#UPDATE_POST_ID_FETCH_TAG">UPDATE_POST_ID_FETCH_TAG</a></li><li><a href="global.html#UPDATE_STATUS_EVENT_TAG">UPDATE_STATUS_EVENT_TAG</a></li><li><a href="global.html#UPDATE_STATUS_POST_LOAD_TAG">UPDATE_STATUS_POST_LOAD_TAG</a></li><li><a href="global.html#updateAllPostsFromBlockChain">updateAllPostsFromBlockChain</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Mon Jun 14 2021 22:01:12 GMT+0530 (India Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

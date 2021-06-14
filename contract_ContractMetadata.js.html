@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: contract/ContractMetadata.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: contract/ContractMetadata.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Address of the contract on BSC chain
+ * @type {string}
+ */
+export const CONTRACT_ADDRESS = "0x17B4660E75C6B6546B4F806cC3453948a435839A"
+
+/**
+ * Contract ABI
+ * @type {{}}
+ */
+export const CONTRACT_ABI = [
+    {
+        inputs: [],
+        stateMutability: "nonpayable",
+        type: "constructor",
+    },
+    {
+        anonymous: false,
+        inputs: [
+            {
+                indexed: true,
+                internalType: "address",
+                name: "owner",
+                type: "address",
+            },
+            {
+                indexed: true,
+                internalType: "address",
+                name: "spender",
+                type: "address",
+            },
+            {
+                indexed: false,
+                internalType: "uint256",
+                name: "value",
+                type: "uint256",
+            },
+        ],
+        name: "Approval",
+        type: "event",
+    },
+    {
+        anonymous: false,
+        inputs: [
+            {
+                indexed: true,
+                internalType: "uint256",
+                name: "id",
+                type: "uint256",
+            },
+            {
+                indexed: true,
+                internalType: "uint256",
+                name: "post",
+                type: "uint256",
+            },
+            {
+                indexed: false,
+                internalType: "address",
+                name: "author",
+                type: "address",
+            },
+        ],
+        name: "CommentAdded",
+        type: "event",
+    },
+    {
+        anonymous: false,
+        inputs: [
+            {
+                indexed: true,
+                internalType: "uint256",
+                name: "id",
+                type: "uint256",
+            },
+            {
+                indexed: true,
+                internalType: "address",
+                name: "author",
+                type: "address",
+            },
+        ],
+        name: "PostAdded",
+        type: "event",
+    },
+    {
+        anonymous: false,
+        inputs: [
+            {
+                indexed: true,
+                internalType: "address",
+                name: "from",
+                type: "address",
+            },
+            {
+                indexed: true,
+                internalType: "address",
+                name: "to",
+                type: "address",
+            },
+            {
+                indexed: false,
+                internalType: "uint256",
+                name: "value",
+                type: "uint256",
+            },
+        ],
+        name: "Transfer",
+        type: "event",
+    },
+    {
+        inputs: [
+            {
+                internalType: "uint256",
+                name: "",
+                type: "uint256",
+            },
+        ],
+        name: "_admin",
+        outputs: [
+            {
+                internalType: "address",
+                name: "",
+                type: "address",
+            },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "address",
+                name: "",
+                type: "address",
+            },
+            {
+                internalType: "address",
+                name: "",
+                type: "address",
+            },
+        ],
+        name: "_allowance",
+        outputs: [
+            {
+                internalType: "uint256",
+                name: "",
+                type: "uint256",
+            },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "address",
+                name: "",
+                type: "address",
+            },
+        ],
+        name: "_balance",
+        outputs: [
+            {
+                internalType: "uint256",
+                name: "",
+                type: "uint256",
+            },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [],
+        name: "_decimals",
+        outputs: [
+            {
+                internalType: "uint8",
+                name: "",
+                type: "uint8",
+            },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [],
+        name: "_name",
+        outputs: [
+            {
+                internalType: "string",
+                name: "",
+                type: "string",
+            },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "uint256",
+                name: "",
+                type: "uint256",
+            },
+        ],
+        name: "_postBank",
+        outputs: [
+            {
+                internalType: "string",
+                name: "_heading",
+                type: "string",
+            },
+            {
+                internalType: "string",
+                name: "_body",
+                type: "string",
+            },
+            {
+                internalType: "string",
+                name: "_location",
+                type: "string",
+            },
+            {
+                internalType: "uint256",
+                name: "_timeStamp",
+                type: "uint256",
+            },
+            {
+                internalType: "address",
+                name: "_author",
+                type: "address",
+            },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "uint256",
+                name: "",
+                type: "uint256",
+            },
+        ],
+        name: "_postBankIndex",
+        outputs: [
+            {
+                internalType: "uint256",
+                name: "",
+                type: "uint256",
+            },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [],
+        name: "_symbol",
+        outputs: [
+            {
+                internalType: "string",
+                name: "",
+                type: "string",
+            },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [],
+        name: "_tokenOwner",
+        outputs: [
+            {
+                internalType: "address",
+                name: "",
+                type: "address",
+            },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [],
+        name: "_totalSupply",
+        outputs: [
+            {
+                internalType: "uint256",
+                name: "",
+                type: "uint256",
+            },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [],
+        name: "_transactionCharge",
+        outputs: [
+            {
+                internalType: "uint256",
+                name: "",
+                type: "uint256",
+            },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "string",
+                name: "heading",
+                type: "string",
+            },
+            {
+                internalType: "string",
+                name: "body",
+                type: "string",
+            },
+            {
+                internalType: "string",
+                name: "location",
+                type: "string",
+            },
+            {
+                internalType: "string[]",
+                name: "keywords",
+                type: "string[]",
+            },
+        ],
+        name: "addPost",
+        outputs: [
+            {
+                internalType: "bool",
+                name: "",
+                type: "bool",
+            },
+        ],
+        stateMutability: "nonpayable",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "address",
+                name: "_owner",
+                type: "address",
+            },
+            {
+                internalType: "address",
+                name: "_spender",
+                type: "address",
+            },
+        ],
+        name: "allowance",
+        outputs: [
+            {
+                internalType: "uint256",
+                name: "remaining",
+                type: "uint256",
+            },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "address",
+                name: "_spender",
+                type: "address",
+            },
+            {
+                internalType: "uint256",
+                name: "_value",
+                type: "uint256",
+            },
+        ],
+        name: "approve",
+        outputs: [
+            {
+                internalType: "bool",
+                name: "success",
+                type: "bool",
+            },
+        ],
+        stateMutability: "nonpayable",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "address",
+                name: "_owner",
+                type: "address",
+            },
+        ],
+        name: "balanceOf",
+        outputs: [
+            {
+                internalType: "uint256",
+                name: "",
+                type: "uint256",
+            },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "string",
+                name: "a",
+                type: "string",
+            },
+            {
+                internalType: "string",
+                name: "b",
+                type: "string",
+            },
+        ],
+        name: "compareStrings",
+        outputs: [
+            {
+                internalType: "bool",
+                name: "",
+                type: "bool",
+            },
+        ],
+        stateMutability: "pure",
+        type: "function",
+    },
+    {
+        inputs: [],
+        name: "decimals",
+        outputs: [
+            {
+                internalType: "uint8",
+                name: "",
+                type: "uint8",
+            },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "uint256",
+                name: "commentID",
+                type: "uint256",
+            },
+        ],
+        name: "getComment",
+        outputs: [
+            {
+                internalType: "address",
+                name: "author",
+                type: "address",
+            },
+            {
+                internalType: "string",
+                name: "body",
+                type: "string",
+            },
+            {
+                internalType: "uint256",
+                name: "vote",
+                type: "uint256",
+            },
+            {
+                internalType: "uint256",
+                name: "timestamp",
+                type: "uint256",
+            },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [],
+        name: "getOwner",
+        outputs: [
+            {
+                internalType: "address",
+                name: "",
+                type: "address",
+            },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "uint256",
+                name: "indexNumber",
+                type: "uint256",
+            },
+        ],
+        name: "getPost",
+        outputs: [
+            {
+                internalType: "string",
+                name: "heading",
+                type: "string",
+            },
+            {
+                internalType: "string",
+                name: "body",
+                type: "string",
+            },
+            {
+                internalType: "string",
+                name: "location",
+                type: "string",
+            },
+            {
+                internalType: "string[]",
+                name: "keywords",
+                type: "string[]",
+            },
+            {
+                internalType: "uint256",
+                name: "timestamp",
+                type: "uint256",
+            },
+            {
+                internalType: "address",
+                name: "author",
+                type: "address",
+            },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [],
+        name: "getPostBankIndex",
+        outputs: [
+            {
+                internalType: "uint256[]",
+                name: "index",
+                type: "uint256[]",
+            },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "uint256",
+                name: "postIndex",
+                type: "uint256",
+            },
+        ],
+        name: "getPostCommentsIndex",
+        outputs: [
+            {
+                internalType: "uint256[]",
+                name: "index",
+                type: "uint256[]",
+            },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "uint256",
+                name: "postIndex",
+                type: "uint256",
+            },
+        ],
+        name: "isPostExisting",
+        outputs: [
+            {
+                internalType: "bool",
+                name: "",
+                type: "bool",
+            },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [],
+        name: "name",
+        outputs: [
+            {
+                internalType: "string",
+                name: "",
+                type: "string",
+            },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "uint256",
+                name: "postIndex",
+                type: "uint256",
+            },
+            {
+                internalType: "string",
+                name: "comment",
+                type: "string",
+            },
+            {
+                internalType: "uint256",
+                name: "vote",
+                type: "uint256",
+            },
+        ],
+        name: "postComment",
+        outputs: [
+            {
+                internalType: "bool",
+                name: "success",
+                type: "bool",
+            },
+        ],
+        stateMutability: "nonpayable",
+        type: "function",
+    },
+    {
+        inputs: [],
+        name: "symbol",
+        outputs: [
+            {
+                internalType: "string",
+                name: "",
+                type: "string",
+            },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [],
+        name: "totalSupply",
+        outputs: [
+            {
+                internalType: "uint256",
+                name: "",
+                type: "uint256",
+            },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "address",
+                name: "_to",
+                type: "address",
+            },
+            {
+                internalType: "uint256",
+                name: "_value",
+                type: "uint256",
+            },
+        ],
+        name: "transfer",
+        outputs: [
+            {
+                internalType: "bool",
+                name: "success",
+                type: "bool",
+            },
+        ],
+        stateMutability: "nonpayable",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "address",
+                name: "_from",
+                type: "address",
+            },
+            {
+                internalType: "address",
+                name: "_to",
+                type: "address",
+            },
+            {
+                internalType: "uint256",
+                name: "_value",
+                type: "uint256",
+            },
+        ],
+        name: "transferFrom",
+        outputs: [
+            {
+                internalType: "bool",
+                name: "success",
+                type: "bool",
+            },
+        ],
+        stateMutability: "nonpayable",
+        type: "function",
+    },
+];
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AlertNotification.html">AlertNotification</a></li></ul><h3>Classes</h3><ul><li><a href="GlobalEventListener.html">GlobalEventListener</a></li><li><a href="MainScreen.html">MainScreen</a></li><li><a href="module-AlertNotification.html">AlertNotification</a></li><li><a href="Post.html">Post</a></li><li><a href="PostCard.html">PostCard</a></li><li><a href="PostLoadingScreen.html">PostLoadingScreen</a></li><li><a href="SplashScreen.html">SplashScreen</a></li><li><a href="TimeLine.html">TimeLine</a></li><li><a href="TitleBar.html">TitleBar</a></li></ul><h3>Global</h3><ul><li><a href="global.html#CONTRACT_ABI">CONTRACT_ABI</a></li><li><a href="global.html#CONTRACT_ADDRESS">CONTRACT_ADDRESS</a></li><li><a href="global.html#createPostTimeLineInterface">createPostTimeLineInterface</a></li><li><a href="global.html#delay">delay</a></li><li><a href="global.html#getLastIntentData">getLastIntentData</a></li><li><a href="global.html#getPosts">getPosts</a></li><li><a href="global.html#getPostsFromBlockChain">getPostsFromBlockChain</a></li><li><a href="global.html#Intent">Intent</a></li><li><a href="global.html#loadContract">loadContract</a></li><li><a href="global.html#loadPosts">loadPosts</a></li><li><a href="global.html#loadReadOnlyMode">loadReadOnlyMode</a></li><li><a href="global.html#LoadWeb3">LoadWeb3</a></li><li><a href="global.html#MAIN_CONTEXT_ID">MAIN_CONTEXT_ID</a></li><li><a href="global.html#ShowNotification">ShowNotification</a></li><li><a href="global.html#sortByNewTimeStampFirst">sortByNewTimeStampFirst</a></li><li><a href="global.html#UPDATE_POST_ID_FETCH_TAG">UPDATE_POST_ID_FETCH_TAG</a></li><li><a href="global.html#UPDATE_STATUS_EVENT_TAG">UPDATE_STATUS_EVENT_TAG</a></li><li><a href="global.html#UPDATE_STATUS_POST_LOAD_TAG">UPDATE_STATUS_POST_LOAD_TAG</a></li><li><a href="global.html#updateAllPostsFromBlockChain">updateAllPostsFromBlockChain</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Mon Jun 14 2021 22:01:12 GMT+0530 (India Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

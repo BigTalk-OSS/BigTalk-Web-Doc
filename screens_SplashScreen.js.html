@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: screens/SplashScreen.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: screens/SplashScreen.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, {useState, useEffect, useCallback} from 'react';
+import './style/SplashScreen.css'
+import logo from '../logo.svg'
+import GlobalEventListener from "../utils/GlobalEventListener";
+import {LoadWeb3} from "../web3js/ContractInterface";
+import {delay} from "../utils/Helper";
+import {Intent} from "../utils/Intent";
+import MainScreen, {MAIN_CONTEXT_ID} from "./MainScreen";
+import {ShowNotification} from "../utils/ShowNotification";
+import AlertNotification from "../artifacts/AlertNotification";
+import { AnimateOnChange } from 'react-animation'
+import {updateAllPostsFromBlockChain} from "../utils/LoadingPost";
+import TimeLine from "./TimeLine";
+
+/**
+ * Initial loading screen of the web-app. Also the interface that should be active while any Web3 authorizations are taking place.
+ * @module SplashScreen
+ * @export
+ * @param props
+ * @returns {JSX.Element}
+ * @constructor
+ *
+ * @example
+ * &lt;div>
+ * &lt;Splashscreen/>
+ * &lt;/div>
+ *
+ * @author amannirala13
+ */
+export default function SplashScreen(props){
+
+    let [status, setStatus] = useState("Loading")
+
+    /**
+     * This functions updates the status text in SplashScreen on event dispatch
+     * @param data - Data from the event. The `data.detail` object in the event must have the new status text.
+     */
+    const updateStatus = (data) =>{
+        console.log(data);
+        setStatus(data.detail);
+    }
+
+    /**
+     * Subscribing to Web3 update event using GlobalEventListener
+     * @see GlobalEventListener
+     */
+    GlobalEventListener(props.statusUpdateEvent, updateStatus);
+
+
+    /**
+     * Once the webpage is loaded, the web-app loads the MainScreen with is the parent holder of all the other components
+     * or display a message notification if the loading fails for any reason.
+     * @see updateAllPostsFromBlockChain
+     * @see module:ShowNotification
+     */
+    window.addEventListener('load', _ => {
+        LoadWeb3()
+            .then(async ()=>{
+            await delay(5000);
+            Intent(document.getElementById('root'), &lt;MainScreen/>)
+                .then((success) => {
+                    if (success)
+                        updateAllPostsFromBlockChain(document.getElementById(MAIN_CONTEXT_ID), &lt;TimeLine/>);
+                })
+                .catch((e)=>{
+                ShowNotification(&lt;AlertNotification theme={"danger"} message={e}/>);
+                console.log(e);
+                });
+            })
+            .catch((e)=>{
+            ShowNotification(&lt;AlertNotification theme={"danger"} message={e}/>);
+                console.log(e);
+            });
+    })
+
+
+    return(
+        &lt;div className="SplashScreen-content">
+        &lt;img id="SplashScreen-logo" src={logo} alt="app-logo"/>
+        &lt;br/>&lt;br/>
+        &lt;div className="progress">
+            &lt;div className="progress-bar progress-bar-striped progress-bar-animated"
+                 id="SplashScreen-progress"
+                 role="progressbar" aria-valuenow="75"
+                 aria-valuemin="0" aria-valuemax="100"/>
+        &lt;/div> &lt;br/>
+        &lt;AnimateOnChange animationIn={"popIn"} animationOut={"popOut"}>
+            &lt;span id="SplashScreen-status">{status}&lt;/span>
+        &lt;/AnimateOnChange>
+    &lt;/div>)
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AlertNotification.html">AlertNotification</a></li></ul><h3>Classes</h3><ul><li><a href="GlobalEventListener.html">GlobalEventListener</a></li><li><a href="MainScreen.html">MainScreen</a></li><li><a href="module-AlertNotification.html">AlertNotification</a></li><li><a href="Post.html">Post</a></li><li><a href="PostCard.html">PostCard</a></li><li><a href="PostLoadingScreen.html">PostLoadingScreen</a></li><li><a href="SplashScreen.html">SplashScreen</a></li><li><a href="TimeLine.html">TimeLine</a></li><li><a href="TitleBar.html">TitleBar</a></li></ul><h3>Global</h3><ul><li><a href="global.html#CONTRACT_ABI">CONTRACT_ABI</a></li><li><a href="global.html#CONTRACT_ADDRESS">CONTRACT_ADDRESS</a></li><li><a href="global.html#createPostTimeLineInterface">createPostTimeLineInterface</a></li><li><a href="global.html#delay">delay</a></li><li><a href="global.html#getLastIntentData">getLastIntentData</a></li><li><a href="global.html#getPosts">getPosts</a></li><li><a href="global.html#getPostsFromBlockChain">getPostsFromBlockChain</a></li><li><a href="global.html#Intent">Intent</a></li><li><a href="global.html#loadContract">loadContract</a></li><li><a href="global.html#loadPosts">loadPosts</a></li><li><a href="global.html#loadReadOnlyMode">loadReadOnlyMode</a></li><li><a href="global.html#LoadWeb3">LoadWeb3</a></li><li><a href="global.html#MAIN_CONTEXT_ID">MAIN_CONTEXT_ID</a></li><li><a href="global.html#ShowNotification">ShowNotification</a></li><li><a href="global.html#sortByNewTimeStampFirst">sortByNewTimeStampFirst</a></li><li><a href="global.html#UPDATE_POST_ID_FETCH_TAG">UPDATE_POST_ID_FETCH_TAG</a></li><li><a href="global.html#UPDATE_STATUS_EVENT_TAG">UPDATE_STATUS_EVENT_TAG</a></li><li><a href="global.html#UPDATE_STATUS_POST_LOAD_TAG">UPDATE_STATUS_POST_LOAD_TAG</a></li><li><a href="global.html#updateAllPostsFromBlockChain">updateAllPostsFromBlockChain</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Mon Jun 14 2021 22:01:12 GMT+0530 (India Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
